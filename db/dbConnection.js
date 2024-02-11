@@ -1,10 +1,13 @@
+require("dotenv").config()
+
 const mysql = require("mysql")
 
 const connection = mysql.createConnection({
 	namedPlaceholders: true,
 	host: "localhost",
-	user: "siameats_terpdbadmin",
-	password: "terpdbadmin@1oct",
+	port: "8889",
+	user: "root",
+	password: "root",
 	database: "siameats_terp",
 	timeout: "10000",
 })

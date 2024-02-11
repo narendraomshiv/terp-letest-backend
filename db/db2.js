@@ -1,9 +1,12 @@
+require("dotenv").config()
+
 const mysql2 = require("mysql2/promise")
 const db2 = mysql2.createPool({
 	namedPlaceholders: true,
 	host: "localhost",
-	user: "siameats_terpdbadmin",
-	password: "terpdbadmin@1oct",
+	port: "8889",
+	user: "root",
+	password: "root",
 	database: "siameats_terp",
 	waitForConnections: true,
 	connectionLimit: 32,
