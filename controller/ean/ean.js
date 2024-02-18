@@ -129,10 +129,43 @@ const EditEan = async (req, res) => {
 	}
 }
 
+const createEanProducne = async (req, res) => {
+	try {
+
+		const { packing_common_id, ean_id, ean_quantity, unit_id, brand_id } = req.body
+
+		await db.execute("CALL Insert_packing_ean(?, ?, ?, ?, ?)", [packing_common_id, ean_id, ean_quantity, unit_id, brand_id])
+
+		res.status(200).send({
+			success: true,
+			message: "Create Successfully"
+		})
+
+	} catch (error) {
+		res.status(500).send({
+			success: false,
+			message: error,
+		})
+	}
+}
+
+const getEanDetailViews = async (req, res) => {
+	try {
+		
+	} catch (error) {
+		res.status(500).send({
+			success: false,
+			message: error,
+		})
+	}
+}
+
 module.exports = {
 	getEanDeatils,
 	addEanDetails,
 	updateEanDetails,
 	EditEan,
 	createEan,
+	getEanDetailViews,
+	createEanProducne
 }

@@ -19,6 +19,8 @@ const {
 	updateEanDetails,
 	createEan,
 	EditEan,
+	getEanDetailViews,
+	createEanProducne
 } = require("../controller/ean/ean")
 
 const {
@@ -127,6 +129,7 @@ const {
 	addPackingCommon,
 	addPackingEan,
 	getBrand,
+	getPackingCommon,
 } = require("../controller/pack")
 const {
 	getConsignee,
@@ -357,14 +360,17 @@ router.get("/getToPack", getToPack)
 router.post("/addPackingCommon", addPackingCommon)
 router.post("/addPackingEan", addPackingEan)
 router.get("/getBrand", getBrand)
+router.post("/getPackingCommon", getPackingCommon)
 
 router.get("/getEanDetails", getEanDeatils)
+router.get("/getEanDetailViews", getEanDetailViews)
 router.post("/addEanDetails", addEanDetails)
 router.post("/updateEanDetails", updateEanDetails)
 router.post("/getItfDetails", getItfDetails)
 router.post("/getItfDetails", getItfDetails)
 router.post("/updateItfDetails", updateItfDetails)
 router.post("/addItfDetails", addItfDetails)
+router.post("/createEanProducne", createEanProducne)
 
 router.get("/getConsignee", getConsignee)
 

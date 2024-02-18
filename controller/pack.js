@@ -37,7 +37,7 @@ const addPackingCommon = async (req, res) => {
 		])
 		res.status(200).json({
 			message: "Packing Common Added Successfully",
-			data: result.insertId,
+			packing_common_id: result.insertId,
 		})
 	} catch (err) {
 		res.status(400).json({
@@ -106,9 +106,30 @@ const getBrand = async (req, res) => {
 	}
 }
 
+const getPackingCommon = async(req, res) => {
+	try {
+		const { pod_code, sorting_id } = req.body
+
+		const [result] = await db.query(`SELECT * FROM packing_common WHERE sorting_id = ? and pod_code = ?`,
+			[sorting_id, pod_code]
+		)
+
+		res.status(200).json({
+			message: "success",
+			data: result[0],
+		})
+	} catch (e) {
+		res.status(500).json({
+			message: "Error Occured",
+			error: e,
+		})
+	}
+}
+
 module.exports = {
 	getToPack,
 	addPackingCommon,
 	addPackingEan,
 	getBrand,
+	getPackingCommon
 }
