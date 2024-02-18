@@ -363,7 +363,7 @@ router.get("/getBrand", getBrand)
 router.post("/getPackingCommon", getPackingCommon)
 
 router.get("/getEanDetails", getEanDeatils)
-router.get("/getEanDetailViews", getEanDetailViews)
+router.post("/getEanDetailViews", getEanDetailViews)
 router.post("/addEanDetails", addEanDetails)
 router.post("/updateEanDetails", updateEanDetails)
 router.post("/getItfDetails", getItfDetails)

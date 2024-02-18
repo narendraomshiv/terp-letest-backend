@@ -1,7 +1,7 @@
 
 let config = {
 	host: "localhost",
-	port: 5001,
+	port: 8889,
 	user: 'root',
 	password: 'root',
 	database: 'siameats_terp'

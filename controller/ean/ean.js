@@ -151,6 +151,16 @@ const createEanProducne = async (req, res) => {
 
 const getEanDetailViews = async (req, res) => {
 	try {
+
+		const [result] = await db2.query(
+			"SELECT * FROM packing_ean_view WHERE packing_common_id = ?",
+			[req.body.packing_common_id],
+		)
+
+		res.status(200).json({
+			message: "success",
+			data: result,
+		})
 		
 	} catch (error) {
 		res.status(500).send({
