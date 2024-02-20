@@ -134,7 +134,7 @@ const createEanProducne = async (req, res) => {
 
 		const { packing_common_id, ean_id, ean_quantity, unit_id, brand_id } = req.body
 
-		await db.execute("CALL Insert_packing_ean(?, ?, ?, ?, ?)", [packing_common_id, ean_id, ean_quantity, unit_id, brand_id])
+		await db2.execute(`CALL Insert_packing_ean(${packing_common_id}, ${ean_id}, ${ean_quantity}, ${unit_id}, ${brand_id})`)
 
 		res.status(200).send({
 			success: true,
@@ -152,7 +152,7 @@ const createEanProducne = async (req, res) => {
 const getEanDetailViews = async (req, res) => {
 	try {
 
-		const [result] = await db2.query(
+		const [result] = await db.query(
 			"SELECT * FROM packing_ean_view WHERE packing_common_id = ?",
 			[req.body.packing_common_id],
 		)

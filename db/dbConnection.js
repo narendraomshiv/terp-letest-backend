@@ -4,7 +4,7 @@ const mysql = require("mysql")
 
 let config = {
 	host: "localhost",
-	port: 8889,
+	port: '8889',
 	user: 'root',
 	password: 'root',
 	database: 'siameats_terp'
