@@ -20,7 +20,8 @@ const {
 	createEan,
 	EditEan,
 	getEanDetailViews,
-	createEanProducne
+	createEanProducne,
+	createEanPacking
 } = require("../controller/ean/ean")
 
 const {
@@ -371,6 +372,7 @@ router.post("/getItfDetails", getItfDetails)
 router.post("/updateItfDetails", updateItfDetails)
 router.post("/addItfDetails", addItfDetails)
 router.post("/createEanProducne", createEanProducne)
+router.post("/createEanPacking", createEanPacking)
 
 router.get("/getConsignee", getConsignee)
 

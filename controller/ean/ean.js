@@ -152,7 +152,7 @@ const createEanProducne = async (req, res) => {
 const getEanDetailViews = async (req, res) => {
 	try {
 
-		const [result] = await db.query(
+		const [result] = await db2.query(
 			"SELECT * FROM packing_ean_view WHERE packing_common_id = ?",
 			[req.body.packing_common_id],
 		)
@@ -170,6 +170,26 @@ const getEanDetailViews = async (req, res) => {
 	}
 }
 
+const createEanPacking = async (req, res) => {
+	try {
+
+		const { packing_common_id } = req.body
+
+		await db2.execute(`CALL New_Ean_Packing(${packing_common_id})`)
+
+		res.status(200).send({
+			success: true,
+			message: "Create Successfully"
+		})
+
+	} catch (error) {
+		res.status(500).send({
+			success: false,
+			message: error,
+		})
+	}
+}
+
 module.exports = {
 	getEanDeatils,
 	addEanDetails,
@@ -177,5 +197,6 @@ module.exports = {
 	EditEan,
 	createEan,
 	getEanDetailViews,
-	createEanProducne
+	createEanProducne,
+	createEanPacking
 }
