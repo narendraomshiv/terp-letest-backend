@@ -17,8 +17,7 @@ const addClient = async (req, res) => {
 		)
 		res.status(200).send({
 			success: true,
-			message: "Client Added Successfully",
-			data: rows,
+			message: "Client Added Successfully"
 		})
 	} catch (e) {
 		res.status(500).send({
@@ -71,8 +70,7 @@ const updateClientData = async (req, res) => {
 		)
 		res.status(200).send({
 			success: true,
-			message: "Getting Data Successfully",
-			clientData: rows,
+			message: "Update Data Successfully"
 		})
 	} catch (e) {
 		res.status(500).send({

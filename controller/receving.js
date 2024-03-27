@@ -19,19 +19,29 @@ const getAllReceving = async (req, res) => {
 
 const getViewToReceving = async (req, res) => {
 	try {
-		const [data] = await db2.query(
-			"SELECT a.*, b.unit_id FROM `to_receive` as a INNER JOIN dropdown_unit_count as b ON a.unit = b.unit_name_en",
-		)
+		const [data] = await db2.query(`
+            SELECT a.*, b.unit_id 
+            FROM to_receive AS a 
+            INNER JOIN dropdown_unit_count AS b 
+            ON a.unit = b.unit_name_en 
+        `);
+		/* const [data] = await db2.query(`
+					SELECT a.*, b.unit_id 
+					FROM to_receive AS a 
+					INNER JOIN dropdown_unit_count AS b 
+					ON a.unit COLLATE utf8mb4_general_ci = b.unit_name_en COLLATE utf8mb4_general_ci
+				`); */
 		res.status(200).json({
 			data: data,
-		})
+		});
 	} catch (e) {
 		res.status(400).json({
-			message: "Error Occured",
+			message: "Error Occurred",
 			error: e,
-		})
+		});
 	}
-}
+};
+
 
 const getAllReceving_bp = async (req, res) => {
 	try {
@@ -56,8 +66,7 @@ const addReceving = async (req, res) => {
 	} = req.body
 	try {
 		await db2.query(
-			`CALL ${
-				+pod_type_id == 3 ? "New_Receiving" : "New_Receiving_BP"
+			`CALL ${+pod_type_id == 3 ? "New_Receiving" : "New_Receiving_BP"
 			}(?, ?, ?, ?, ?, ?)`,
 			[
 				pod_code,

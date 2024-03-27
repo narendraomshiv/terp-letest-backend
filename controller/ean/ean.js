@@ -132,8 +132,11 @@ const EditEan = async (req, res) => {
 const createEanProducne = async (req, res) => {
 	try {
 
-		const { packing_common_id, ean_id, ean_quantity, unit_id, brand_id } = req.body
-
+		const { packing_common_id, ean_id, ean_quantity, unit_id, brand_id, number_of_staff, start_time, end_time } = req.body
+     //  console.log(req.body);
+		await db2.query(
+			`UPDATE packing_common SET number_of_staff = "${number_of_staff}", start_time = "${start_time}", end_time = "${end_time}" WHERE packing_common_id = "${packing_common_id}"`,
+		)
 		await db2.execute(`CALL Insert_packing_ean(${packing_common_id}, ${ean_id}, ${ean_quantity}, ${unit_id}, ${brand_id})`)
 
 		res.status(200).send({
@@ -142,9 +145,10 @@ const createEanProducne = async (req, res) => {
 		})
 
 	} catch (error) {
+		console.log(error.message);
 		res.status(500).send({
 			success: false,
-			message: error,
+			message: error.message,
 		})
 	}
 }

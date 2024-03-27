@@ -124,6 +124,9 @@ const {
 	addsorting,
 	getSorting,
 	revertSorting,
+	restoreEanPacking,
+	restoreSorting,
+	restorePackingCommon
 } = require("../controller/sorting")
 const {
 	getToPack,
@@ -169,6 +172,7 @@ const {
 	deleteOrder,
 	updateOrderFreight,
 	aslWastage,
+	RestoreOrderPacking
 } = require("../controller/orders")
 const { dashboardOpertation } = require("../controller/operation")
 const {
@@ -236,9 +240,9 @@ router.post("/addClient", addClient)
 router.get("/getAllClients", getAllClients)
 router.post("/updateClientData", updateClientData)
 router.get("/getClientDataAsOptions", getClientAsOptions)
-router.post("/updateClientStatus", updateClientStatus)
+router.post("/updateClientStatus", updateClientStatus)  // all done
 
-router.post("/createUnit", createUnit)
+router.post("/createUnit", createUnit) 
 router.post("/updateUnit", updateUnit)
 router.get("/getAllUnit", getAllUnit)
 router.post("/updateUnitStatus", updateUnitStatus)
@@ -356,6 +360,9 @@ router.get("/getViewToSort", getViewToSort)
 router.post("/addsorting", addsorting)
 router.get("/getSorting", getSorting)
 router.post("/revertSorting", revertSorting)
+router.post("/restoreEanPacking", restoreEanPacking)  // new_added
+router.post("/restoreSorting", restoreSorting)
+router.post("/restorePackingCommon", restorePackingCommon)
 
 router.get("/getToPack", getToPack)
 router.post("/addPackingCommon", addPackingCommon)
@@ -410,6 +417,8 @@ router.post("/addOrderInput", addOrderInput)
 router.get("/getOrderSummary", getOrderSummary)
 router.post("/deleteOrder", deleteOrder)
 router.post("/updateOrderFreight", updateOrderFreight)
+router.post("/RestoreOrderPacking", RestoreOrderPacking)
+
 
 router.get("/getEanAvailable", getEanAvailable)
 router.post("/aslWastage", aslWastage)
@@ -424,3 +433,8 @@ router.post("/createExpenseItems", createExpenseItems)
 router.post("/updateExpenseItems", updateExpenseItems)
 router.get("/getChartOfAccounts", getChartOfAccounts)
 module.exports = router
+
+// Table 'mobap6fg_terpdb.Orders_pipline' doesn't exist
+
+
+//   https://ipinfo.io/

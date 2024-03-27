@@ -20,7 +20,8 @@ FROM orders
 INNER JOIN consignee ON  orders.consignee_id = consignee.consignee_id
 INNER JOIN vendors AS vendor ON orders.Freight_provider_ = vendor.vendor_id
 INNER JOIN setup_location AS locaiton ON orders.loading_location = locaiton.id
-INNER JOIN order_freight_details AS freight ON orders.order_id = freight.order_id`,
+INNER JOIN order_freight_details AS freight ON orders.order_id = freight.order_id
+ORDER BY Order_number DESC`,
 		)
 		res.status(200).json({ data })
 	} catch (e) {
@@ -85,10 +86,8 @@ const createOrder = async (req, res) => {
 		for (const d of details) {
 			if (!d.od_id) {
 				const [i] = await db.query(
-					`SET @p6='';CALL insert_order_details(${d.ITF || "null"}, ${
-						d.itf_quantity || "null"
-					}, ${d.itf_unit || "null"}, ${input.brand_id || "null"}, ${
-						input.user || 1
+					`SET @p6='';CALL insert_order_details(${d.ITF || "null"}, ${d.itf_quantity || "null"
+					}, ${d.itf_unit || "null"}, ${input.brand_id || "null"}, ${input.user || 1
 					}, ${data.insertId || ""}, @p6); SELECT @p6 AS od_id`,
 				)
 			}
@@ -104,6 +103,7 @@ const createOrder = async (req, res) => {
 
 const addOrderInput = async (req, res) => {
 	const { input, details } = req.body
+	 console.log(req.body);
 	try {
 		const [isExist] = await db.execute(
 			"SELECT * FROM orders WHERE order_id = ?",
@@ -135,8 +135,9 @@ const addOrderInput = async (req, res) => {
 			created: input.created || null,
 			user: input.user || 6,
 		}
-
+        console.log(input.order_id);
 		if (!isExist.length) {
+			console.log(input.order_id);
 			query = `INSERT INTO orders (order_id, Order_number, brand_id,
       Shipment_ref, quote_id, client_id, loading_location,
       consignee_id, destination_port_id, liner_id, from_port_,
@@ -179,6 +180,7 @@ const addOrderInput = async (req, res) => {
 		data = isExist.length ? { insertId: isExist[0].order_id } : data2
 		let i
 		if (!details.od_id) {
+			//console.log(req.body);
 			const [rows] = await db.query(
 				"SET @p6='';CALL insert_order_details(?, ?, ?, ?, ?, ?, @p6); SELECT @p6 AS od_id",
 				[
@@ -192,6 +194,7 @@ const addOrderInput = async (req, res) => {
 			)
 			i = rows
 		} else {
+			//console.log(req.body);
 			await db.execute(
 				`UPDATE order_details SET
 				ITF = :ITF,
@@ -205,13 +208,13 @@ const addOrderInput = async (req, res) => {
 					itf_quantity: details.itf_quantity || null,
 					itf_unit: details.itf_unit || null,
 					brand: details.brand_id,
-					adjusted_price: details.adjusted_price || null,
+					adjusted_price: Number.isInteger(parseInt(details.adjusted_price)) ? parseInt(details.adjusted_price) : null,
 				},
 			)
 			await db.execute("CALL order_details_Update(?)", [details.od_id])
 			i = details.od_id
 		}
-
+		//  console.log(data);
 		await db.execute("CALL New_order_with_id(?)", [
 			data.insertId || input.order_id,
 		])
@@ -221,6 +224,7 @@ const addOrderInput = async (req, res) => {
 		res.status(500).json({ message: "Internal server error", error: e })
 	}
 }
+
 const updateOrder = async (req, res) => {
 	const { input, details } = req.body
 	try {
@@ -260,12 +264,9 @@ const updateOrder = async (req, res) => {
 		for (const d of details) {
 			if (!d.od_id) {
 				const [i] = await db.query(
-					`SET @p6='';CALL insert_order_details(${d.ITF || "null"}, ${
-						d.itf_quantity || "null"
-					}, ${d.itf_unit || "null"}, ${input.brand_id || "null"}, ${
-						input.user || 1
-					}, ${
-						data.insertId || input.order_id || ""
+					`SET @p6='';CALL insert_order_details(${d.ITF || "null"}, ${d.itf_quantity || "null"
+					}, ${d.itf_unit || "null"}, ${input.brand_id || "null"}, ${input.user || 1
+					}, ${data.insertId || input.order_id || ""
 					}, @p6); SELECT @p6 AS od_id`,
 				)
 			} else {
@@ -388,10 +389,8 @@ const newCalculateOrder = async (req, res) => {
 			.entries()) {
 			if (!d.od_id) {
 				const [i] = await db.query(
-					`SET @p6='';CALL insert_order_details(${d.ITF || "null"}, ${
-						d.itf_quantity || "null"
-					}, ${d.itf_unit || "null"}, ${input.brand_id || "null"}, ${
-						input.user || 1
+					`SET @p6='';CALL insert_order_details(${d.ITF || "null"}, ${d.itf_quantity || "null"
+					}, ${d.itf_unit || "null"}, ${input.brand_id || "null"}, ${input.user || 1
 					}, ${insertId || ""}, @p6); SELECT @p6 AS od_id`,
 				)
 				detialsId[idx].insertId = i[2][0].od_id || d.od_id
@@ -516,6 +515,7 @@ const calculateOrder = async (req, res) => {
 
 const doOrderPacking = async (req, res) => {
 	const data = req.body
+	// console.log(req.body);
 	try {
 		await db.execute("CALL New_order_packing(?, ?, ?, ?, ?, ?)", [
 			data.od_id,
@@ -527,7 +527,8 @@ const doOrderPacking = async (req, res) => {
 		])
 		return res.status(200).json({ message: "Success" })
 	} catch (e) {
-		res.status(500).json({ message: "Internal server error", error: e })
+		console.log(e.message);
+		res.status(500).json({ message: "Internal server error", error: e.message })
 	}
 }
 
@@ -653,6 +654,25 @@ const aslWastage = async (req, res) => {
 	}
 }
 
+const RestoreOrderPacking = async (req, res) => {
+	try {
+
+		const { opid } = req.body;
+		await db.execute(`CALL restore_order_packing(${opid})`)
+
+		res.status(200).send({
+			success: true,
+			message: "Restore Successfully"
+		})
+
+	} catch (error) {
+		res.status(500).send({
+			success: false,
+			message: error.message
+		})
+	}
+}
+
 module.exports = {
 	getOrders,
 	createOrder,
@@ -667,4 +687,5 @@ module.exports = {
 	deleteOrder,
 	updateOrderFreight,
 	aslWastage,
+	RestoreOrderPacking
 }

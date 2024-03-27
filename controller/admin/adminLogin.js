@@ -14,11 +14,19 @@ const adminLogin = async (req, res) => {
 			req.body.password == null
 		)
 			throw new Error("password is empty!")
+			
 		const [rows, fields] = await db.execute(
 			"SELECT id, role, name, email, email_verified_at, remember_token, status, last_login,created_at, updated_at, password FROM users WHERE email = ?",
 			[req.body.email],
 		)
-		if (!rows.length) throw new Error("Username Or Password Incorrect")
+		//console.log(!rows.length);
+		if (!rows.length) throw new Error("Username Incorrect")
+
+		/* var hash = bcrypt.hashSync('12345678', 8);
+		await db.execute("UPDATE users SET password = ? WHERE id = ?", [
+			hash, rows[0].id,
+		])  */
+
 		if (!(await bcrypt.compareSync(password, rows[0].password)))
 			throw new Error("Username Or Password Incorrect")
 		await db.execute("UPDATE users SET last_login = NOW() WHERE id = ?", [
@@ -38,3 +46,7 @@ const adminLogin = async (req, res) => {
 }
 
 module.exports = adminLogin
+
+
+// admin- admin@123
+// super-admin- superadmin@123

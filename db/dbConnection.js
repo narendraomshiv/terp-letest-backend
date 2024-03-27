@@ -2,12 +2,21 @@
 
 const mysql = require("mysql")
 
+/* let config = {
+	host: "162.241.86.206",
+	//port: '8889',
+	user: 'mobap6fg_terp',
+	password: 'mRTm2El35$ao',
+	database: 'mobap6fg_terpdb'
+} */
+
 let config = {
 	host: "localhost",
-	port: '8889',
+	port: '3306',
 	user: 'root',
-	password: 'root',
-	database: 'siameats_terp'
+	password: '',
+	database: 'terpdp'
+	//database:'db_terp'
 }
 
 if (process.env.NODE_ENV === "production") {
@@ -34,3 +43,5 @@ connection.connect((error) => {
 })
 
 module.exports = connection
+
+// Which view or table do you want to change?

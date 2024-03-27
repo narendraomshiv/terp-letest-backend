@@ -2,7 +2,7 @@ const { db: db2 } = require("../db/db2")
 
 const getTransportation_Supplier = async (req, res) => {
 	try {
-		const [data] = await db2.query("SELECT * FROM `Transportation_Supplier`")
+		const [data] = await db2.query("SELECT * FROM `transportation_supplier`")
 		res.status(200).json({
 			message: "All Wage",
 			data: data,
@@ -16,7 +16,7 @@ const getTransportation_Supplier = async (req, res) => {
 }
 const getFreight_Supplier = async (req, res) => {
 	try {
-		const [data] = await db2.query("SELECT * FROM `Freight_suppliers`")
+		const [data] = await db2.query("SELECT * FROM `freight_suppliers`")
 		res.status(200).json({
 			message: "All Wage",
 			data: data,

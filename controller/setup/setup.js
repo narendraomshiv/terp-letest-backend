@@ -1029,9 +1029,14 @@ const updateTransportation = (req, res) => {
 	)
 }
 
-const getTransportation = (req, res) => {
+const getTransportation = (req, res) => {//setup_ports
 	db.query(
-		"SELECT a.*, b.name, c.port_type, c.port_type_id FROM setup_transportation a INNER JOIN vendors b ON a.Transportation_provider = b.vendor_id INNER JOIN dropdown_port_type c ON a.port_type = c.port_type_id",
+		`SELECT a.*, b.name, c.port_type, c.port_type_id, s.name as location, p.port_name as port FROM setup_transportation a 
+		INNER JOIN vendors b ON a.Transportation_provider = b.vendor_id 
+		INNER JOIN dropdown_port_type c ON a.port_type = c.port_type_id
+		INNER JOIN setup_location s ON a.loading_from = s.id
+		INNER JOIN setup_ports p ON a.departure_port = p.port_id 
+		`,
 		(error, data) => {
 			if (error) {
 				res.status(500).send({
@@ -1890,6 +1895,7 @@ const getCurrency = async (req, resp) => {
 
 const getIft = async (req, resp) => {
 	try {
+		// "SELECT * FROM itf as a INNER JOIN itf_weight as b ON a.itf_id = b.itf_id",
 		const [data] = await db2.query(
 			"SELECT * FROM itf as a INNER JOIN itf_weight as b ON a.itf_id = b.itf_id",
 		)

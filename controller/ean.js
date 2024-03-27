@@ -2,7 +2,7 @@ const { db } = require("../db/db2")
 
 const getAdjustEanStock = async (req, res) => {
 	try {
-		const [data] = await db.query("SELECT * FROM `adjust_ean_stock`")
+		const [data] = await db.query("SELECT adjust_ean_stock.*, packing_ean.packing_common_id FROM adjust_ean_stock, packing_ean WHERE packing_ean.packing_ean_id=adjust_ean_stock.packing_ean_id")
 		res.status(200).json({
 			message: "Adjust Ean Stock",
 			data: data,

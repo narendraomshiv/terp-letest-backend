@@ -2,11 +2,12 @@ const { db: db2 } = require("../db/db2")
 
 const getAllQuotation = async (req, res) => {
 	try {
+		/* SELECT quotations.*, clients.client_name AS client_name, setup_location.name AS location_name
+		FROM quotations
+		JOIN clients ON quotations.client_id = clients.client_id
+		JOIN setup_location ON quotations.loading_location = setup_location.id; */
 		const [data] = await db2.query(
-			`SELECT quotation.*, clients.client_name AS client_name, setup_location.name AS location_name
-		FROM quotation
-		JOIN clients ON quotation.client_id = clients.client_id
-		JOIN setup_location ON quotation.loading_location = setup_location.id;`,
+			`SELECT * FROM quotations`,
 		)
 		res.status(200).json({
 			message: "All Quotation",
@@ -24,7 +25,7 @@ const addQuotation = async (req, res) => {
 	const quotationData = req.body
 	try {
 		const [data] = await db2.execute(
-			/*sql*/ `INSERT INTO quotation (brand_id, client_id, loading_location, Freight_provider_,
+			/*sql*/ `INSERT INTO quotations (brand_id, client_id, loading_location, Freight_provider_,
 	 liner_id, from_port_, destination_port_id, Clearance_provider, Transportation_provider, consignee_id, fx_id,
 	 fx_rate, mark_up, rebate, palletized, Chamber, load_date, created, updated, user, Status)
 		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, current_timestamp(), '', '1')`,
@@ -96,7 +97,7 @@ const calculateQuotation = async (req, res) => {
 	const { quotationData, inputData } = req.body
 	try {
 		const [{ insertId: quotation_id }] = await db2.execute(
-			`INSERT INTO quotation (brand_id, client_id, loading_location, Freight_provider_,
+			`INSERT INTO quotations (brand_id, client_id, loading_location, Freight_provider_,
 	 liner_id, from_port_, destination_port_id, Clearance_provider, Transportation_provider, consignee_id, fx_id,
 	 fx_rate, mark_up, rebate, palletized, Chamber, load_date, created, updated, user, Status)
 		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, current_timestamp(), '', '1')`,

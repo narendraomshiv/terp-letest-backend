@@ -139,7 +139,7 @@ const addPurchageOrder = (req, resp) => {
 	)
 }
 
-const newAddPurchaseOrder = async (req, resp) => {
+ const newAddPurchaseOrder = async (req, resp) => {
 	const { vendor_id, created, supplier_invoice_number, supplier_invoice_date } =
 		req.body
 	try {
@@ -160,9 +160,34 @@ const newAddPurchaseOrder = async (req, resp) => {
 			.status(200)
 			.json({ success: true, message: "Success", po_id: result[0].po_id })
 	} catch (e) {
-		res.status(500).json({ message: "Error has occured", error: e })
+		resp.status(500).json({ message: "Error has occured", error: e })
 	}
-}
+} 
+ 
+/* const newAddPurchaseOrder = async (req, resp) => {
+	const { vendor_id, created, supplier_invoice_number, supplier_invoice_date } =
+	  req.body;
+	try {
+	  await db2.execute("CALL New_Purchase_order(?, ?)", [vendor_id, created]);
+	  const [result] = await db2.query("SELECT LAST_INSERT_ID() as po_id;");
+	  const invoiceNumber = supplier_invoice_number !== undefined ? supplier_invoice_number : null;
+	  const invoiceDate = supplier_invoice_date !== undefined ? new Date(supplier_invoice_date).toISOString().slice(0, 10) : null;
+	  await db2.execute(
+		"UPDATE purchase_order SET supplier_invoice_number = ?, supplier_invoice_date = ?, created=? WHERE po_id = ?",
+		[
+		  invoiceNumber,
+		  invoiceDate,
+		  created,
+		  result[0].po_id,
+		],
+	  );
+	  resp
+		.status(200)
+		.json({ success: true, message: "Success", po_id: result[0].po_id });
+	} catch (e) {
+	  resp.status(500).json({ message: "Error has occurred", error: e });
+	}
+  }; */
 
 const getPurchaseOrder = (request, response) => {
 	db.query("SELECT * FROM  purchase_order_details", (error, data) => {
@@ -189,6 +214,9 @@ const getPurchaseOrder = (request, response) => {
 		return
 	})
 }
+
+
+  
 
 const getNewPurchaseOrder = (request, response) => {
 	db.query(
@@ -388,13 +416,14 @@ const addPurchaseOrderDetails = (req, res) => {
 		const sql = `CALL New_purchase_order_details(${po_id}, ${pod_type_id}, ${pod_item}, ${pod_quantity}, ${unit_count_id}, ${pod_price}, ${pod_vat}, ${pod_wht_id}, ${pod_crate})`
 		db.query(sql, (err, result) => {
 			if (err) {
+				console.log(err.message);
 				return res
 					.status(500)
-					.json({ success: false, message: "Internal Server Error" })
+					.json({ success: false, message: err.message })
 			}
+			return res.status(200).json({ success: true, message: "Success" })
 		})
-	}
-	return res.status(200).json({ success: true, message: "Success" })
+	}	
 }
 
 const getPurchaseOrderDetails = (req, res) => {
